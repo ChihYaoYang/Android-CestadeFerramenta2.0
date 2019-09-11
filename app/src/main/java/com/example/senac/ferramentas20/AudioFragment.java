@@ -81,11 +81,23 @@ public class AudioFragment extends Fragment {
 
     //Cria function gravar/escutar
     public void gravar() {
-//        startRecording();
+        onRecord(mStartRecording);
+        if (mStartRecording) {
+            gravar.setText("Parar Gravação");
+        } else {
+            gravar.setText("Gravar");
+        }
+        mStartRecording = !mStartRecording;
     }
 
     public void escutar() {
-//        startPlaying();
+        onPlay(mStartPlaying);
+        if (mStartPlaying) {
+            escutar.setText("Parar Áudio");
+        } else {
+            escutar.setText("Escutar");
+        }
+        mStartPlaying = !mStartPlaying;
     }
 
     private void startPlaying() {
@@ -96,6 +108,22 @@ public class AudioFragment extends Fragment {
             player.start();
         } catch (Exception e) {
             Log.e("audio", "Erro => startPlaying");
+        }
+    }
+
+    public void onRecord(boolean start) {
+        if (start) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    }
+
+    public void onPlay(boolean start) {
+        if (start) {
+            startPlaying();
+        } else {
+            stopPlaying();
         }
     }
 
