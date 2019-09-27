@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -22,10 +23,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 public class GeolocalizacaoFragment extends Fragment {
     //Permissão do GPS
+    final int localizacao = 2;
     private static final int REQUEST_ACCESS_FINE_LOCATION = 200;
-    private static final int REQUEST_ACCESS_COARSE_LOCATION = 200;
+    private static final int REQUEST_ACCESS_COARSE_LOCATION = 201;
     private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
     private String[] permission = {Manifest.permission.ACCESS_COARSE_LOCATION};
     private boolean permissionGPS = false;
@@ -66,7 +70,9 @@ public class GeolocalizacaoFragment extends Fragment {
         switch (requestCode) {
             case REQUEST_ACCESS_FINE_LOCATION:
                 permissionGPS = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
+
+            case REQUEST_ACCESS_COARSE_LOCATION:
+                permissionGPS = grantResults[0] == PackageManager.PERMISSION_GRANTED;
         }
         if (!permissionGPS) {
             Toast.makeText(getActivity(), "Aceite as permissões", Toast.LENGTH_SHORT).show();
@@ -74,15 +80,13 @@ public class GeolocalizacaoFragment extends Fragment {
     }
 
     public void pegaLocalizacao() {
-//        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-//        LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
-//        //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-        Uri gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
+        //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+
     }
+
 
     private class MyLocationListener implements LocationListener {
         @Override
@@ -92,12 +96,17 @@ public class GeolocalizacaoFragment extends Fragment {
             String latitude = Double.toString(location.getLatitude());
             longi.setText(longitude);
             lati.setText(latitude);
+
+            String uri = "http://maps.google.com/maps?q=" + latitude + "," + longitude;
+            Log.e("maps", uri);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            startActivity(intent);
         }
 
         @Override
         //Provider被disable時觸發此函數，比如GPS被關閉
         public void onProviderDisabled(String provider) {
-            Toast.makeText(getContext(), "onProviderDisabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "GPS DESATIVADA", Toast.LENGTH_SHORT).show();
         }
 
         @Override
