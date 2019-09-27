@@ -2,10 +2,12 @@ package com.example.senac.ferramentas20;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,7 @@ public class GeolocalizacaoFragment extends Fragment {
     private String[] permission = {Manifest.permission.ACCESS_COARSE_LOCATION};
     private boolean permissionGPS = false;
     LocationManager locationManager;
+
     //Declara variável
     TextView lati, longi;
     Button getlocation;
@@ -70,12 +73,15 @@ public class GeolocalizacaoFragment extends Fragment {
         }
     }
 
-
     public void pegaLocalizacao() {
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
-        //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+//        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//        LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
+//        //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+        Uri gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 
     private class MyLocationListener implements LocationListener {
