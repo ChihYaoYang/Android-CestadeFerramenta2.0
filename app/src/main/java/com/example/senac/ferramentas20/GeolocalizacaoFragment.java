@@ -27,7 +27,6 @@ import java.util.Locale;
 
 public class GeolocalizacaoFragment extends Fragment {
     //Permissão do GPS
-    final int localizacao = 2;
     private static final int REQUEST_ACCESS_FINE_LOCATION = 200;
     private static final int REQUEST_ACCESS_COARSE_LOCATION = 201;
     private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -86,7 +85,6 @@ public class GeolocalizacaoFragment extends Fragment {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
 
     }
-
 
     private class MyLocationListener implements LocationListener {
         @Override
