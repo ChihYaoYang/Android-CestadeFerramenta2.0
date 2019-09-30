@@ -34,9 +34,12 @@ public class GeolocalizacaoFragment extends Fragment {
     private boolean permissionGPS = false;
     LocationManager locationManager;
 
+    String latitudes;
+    String longitudes;
+
     //Declara variável
     TextView lati, longi;
-    Button getlocation;
+    Button getlocation, compartilhar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class GeolocalizacaoFragment extends Fragment {
 
         //find id
         getlocation = view.findViewById(R.id.getlocation);
+        compartilhar = view.findViewById(R.id.compartilhar);
         lati = view.findViewById(R.id.latitude);
         longi = view.findViewById(R.id.longitude);
 
@@ -57,6 +61,12 @@ public class GeolocalizacaoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 pegaLocalizacao();
+            }
+        });
+        compartilhar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compartilha();
             }
         });
         return view;
@@ -86,12 +96,28 @@ public class GeolocalizacaoFragment extends Fragment {
 
     }
 
+    public void compartilha() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, longitudes + "\n" + latitudes);
+        intent.setType("text/plain");
+        if (longitudes != null || latitudes != null) {
+            startActivity(intent);
+        } else {
+            pegaLocalizacao();
+        }
+    }
+
     private class MyLocationListener implements LocationListener {
         @Override
         //當座標改變時觸發此函數，如果Provider傳進相同的座標，它就不會被觸發。
         public void onLocationChanged(Location location) {
             String longitude = Double.toString(location.getLongitude());
             String latitude = Double.toString(location.getLatitude());
+            //Passa variavel
+            longitudes = longitude;
+            latitudes = latitude;
+            //Seta valor para textview
             longi.setText(longitude);
             lati.setText(latitude);
 
@@ -116,7 +142,7 @@ public class GeolocalizacaoFragment extends Fragment {
         @Override
         //Provider的轉態在可用、暫時不可用和無服務三個狀態直接切換時觸發此函數
         public void onStatusChanged(String provider, int status, Bundle extras) {
-            Toast.makeText(getContext(), "onStatusChanged", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "onStatusChanged", Toast.LENGTH_SHORT).show();
         }
     }
 }
