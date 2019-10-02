@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,8 +22,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Locale;
-
 public class GeolocalizacaoFragment extends Fragment {
     //Permissão do GPS
     private static final int REQUEST_ACCESS_FINE_LOCATION = 200;
@@ -34,12 +31,11 @@ public class GeolocalizacaoFragment extends Fragment {
     private boolean permissionGPS = false;
     LocationManager locationManager;
 
-    String latitudes;
-    String longitudes;
-
     //Declara variável
     TextView lati, longi;
-    Button getlocation, compartilhar;
+    Button getlocation, compartilhar, openmapas;
+    String latitudes;
+    String longitudes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +49,7 @@ public class GeolocalizacaoFragment extends Fragment {
         //find id
         getlocation = view.findViewById(R.id.getlocation);
         compartilhar = view.findViewById(R.id.compartilhar);
+        openmapas = view.findViewById(R.id.openmapas);
         lati = view.findViewById(R.id.latitude);
         longi = view.findViewById(R.id.longitude);
 
@@ -67,6 +64,12 @@ public class GeolocalizacaoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 compartilha();
+            }
+        });
+        openmapas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirmapas();
             }
         });
         return view;
@@ -92,15 +95,25 @@ public class GeolocalizacaoFragment extends Fragment {
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
         //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 3, locationListener);
     }
 
     public void compartilha() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT, longitudes + "\n" + latitudes);
+        intent.putExtra(Intent.EXTRA_TEXT, latitudes + "\n" + longitudes);
         intent.setType("text/plain");
+        if (longitudes != null || latitudes != null) {
+            startActivity(intent);
+        } else {
+            pegaLocalizacao();
+        }
+    }
+
+    public void abrirmapas() {
+        String uri = "http://maps.google.com/maps?q=" + latitudes + "," + longitudes;
+        Log.e("maps", uri);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         if (longitudes != null || latitudes != null) {
             startActivity(intent);
         } else {
@@ -115,16 +128,11 @@ public class GeolocalizacaoFragment extends Fragment {
             String longitude = Double.toString(location.getLongitude());
             String latitude = Double.toString(location.getLatitude());
             //Passa variavel
-            longitudes = longitude;
             latitudes = latitude;
+            longitudes = longitude;
             //Seta valor para textview
             longi.setText(longitude);
             lati.setText(latitude);
-
-            String uri = "http://maps.google.com/maps?q=" + latitude + "," + longitude;
-            Log.e("maps", uri);
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            startActivity(intent);
         }
 
         @Override
@@ -136,7 +144,7 @@ public class GeolocalizacaoFragment extends Fragment {
         @Override
         //Provider被enable時觸發此函數，比如GPS被打開
         public void onProviderEnabled(String provider) {
-            Toast.makeText(getContext(), "on ProviderEnabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "GPS ATIVADO", Toast.LENGTH_SHORT).show();
         }
 
         @Override
