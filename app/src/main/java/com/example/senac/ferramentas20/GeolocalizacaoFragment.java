@@ -96,7 +96,7 @@ public class GeolocalizacaoFragment extends Fragment {
         LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
         //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 3, locationListener);
-    }
+}
 
     public void compartilha() {
         Intent intent = new Intent();
