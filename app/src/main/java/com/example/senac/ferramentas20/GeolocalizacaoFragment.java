@@ -10,7 +10,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -23,14 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class GeolocalizacaoFragment extends Fragment {
-    //Permissão do GPS
-    private static final int REQUEST_ACCESS_FINE_LOCATION = 200;
-    private static final int REQUEST_ACCESS_COARSE_LOCATION = 201;
-    private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-    private String[] permission = {Manifest.permission.ACCESS_COARSE_LOCATION};
-    private boolean permissionGPS = false;
     LocationManager locationManager;
-
     //Declara variável
     TextView lati, longi;
     Button getlocation, compartilhar, openmapas;
@@ -41,11 +33,6 @@ public class GeolocalizacaoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_geolocalizacao, container, false);
-
-        //Solicita as permissões para o usuário
-        ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_ACCESS_FINE_LOCATION);
-        ActivityCompat.requestPermissions(getActivity(), permission, REQUEST_ACCESS_COARSE_LOCATION);
-
         //find id
         getlocation = view.findViewById(R.id.getlocation);
         compartilhar = view.findViewById(R.id.compartilhar);
@@ -75,28 +62,17 @@ public class GeolocalizacaoFragment extends Fragment {
         return view;
     }
 
-    //solicitar permissão de GPS
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_ACCESS_FINE_LOCATION:
-                permissionGPS = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-            case REQUEST_ACCESS_COARSE_LOCATION:
-                permissionGPS = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-        }
-        if (!permissionGPS) {
-            Toast.makeText(getActivity(), "Aceite as permissões", Toast.LENGTH_SHORT).show();
+    public void pegaLocalizacao() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        } else {
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
+            //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 3, locationListener);
         }
     }
-
-    public void pegaLocalizacao() {
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new GeolocalizacaoFragment.MyLocationListener();
-        //LocationManager.GPS_PROVIDER 使用GPS定位 / LocationManager.NETWORK_PROVIDER 使用網路定位
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 3, locationListener);
-}
 
     public void compartilha() {
         Intent intent = new Intent();
