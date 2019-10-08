@@ -20,6 +20,14 @@
             android:id="@+id/geolocalizacao"
             android:icon="@drawable/iconfinder_location"
             android:title="Localização" />
+        <item
+            android:id="@+id/phoneimei"
+            android:icon="@drawable/phone"
+            android:title="Phone_Imei" />
+        <item
+            android:id="@+id/qrcode"
+            android:icon="@drawable/qrcode"
+            android:title="QR Code" />
 
     </group>
 </menu>

@@ -117,6 +117,14 @@ public class MainActivity extends AppCompatActivity
             fragment = new GeolocalizacaoFragment();
             title = "Localização";
             viewIsAtHome = false;
+        }else if (id == R.id.phoneimei) {
+            fragment = new Phone_ImeiFragment();
+            title = "Phone_Imei";
+            viewIsAtHome = false;
+        }else if (id == R.id.qrcode) {
+            fragment = new QRcodeFragment();
+            title = "QR Code";
+            viewIsAtHome = false;
         }
 
         //see the toolbar title
