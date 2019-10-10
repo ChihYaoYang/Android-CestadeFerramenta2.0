@@ -13,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -20,11 +21,11 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
-
 public class QRcodeFragment extends Fragment {
     //Declara variável
     SurfaceView surfaceView;
     TextView textView;
+    Button scanner;
     //Declara câmera
     CameraSource cameraSource;
     //Declara plugins do Google (Vision)(QR_Code)
@@ -35,28 +36,26 @@ public class QRcodeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr_code, container, false);
 
-        //check permissão
-        permissao_camera();
-
         //find ID
         surfaceView = view.findViewById(R.id.surfaceView);
         textView = view.findViewById(R.id.qrtextview);
+        scanner = view.findViewById(R.id.scanner);
+
+        scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                opencamera();
+            }
+        });
 
         barcodeDetector = new BarcodeDetector.Builder(getActivity()).setBarcodeFormats(Barcode.QR_CODE).build();
         cameraSource = new CameraSource.Builder(getActivity(), barcodeDetector).setRequestedPreviewSize(300, 300).build();
-        //讓SurfaceView上面顯示東西
+        //讓SurfaceView上面顯示東西 (Exibir objeto SurfaceView)
+        //把相機畫面印在上面(Exibir câmera no SurfaceView)
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            //把相機畫面印在上面
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                try {
-                    cameraSource.start(surfaceHolder);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             }
 
             @Override
@@ -64,7 +63,7 @@ public class QRcodeFragment extends Fragment {
 
             }
 
-            //在關閉的同時就會關掉相機
+            //在關閉的同時就會關掉相機 (Quando fecha, fecha câmera)
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 cameraSource.stop();
@@ -79,7 +78,7 @@ public class QRcodeFragment extends Fragment {
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
-                //讓他判斷是不是有掃描到條碼，有的話就顯示出來
+                //讓他判斷是不是有掃描到條碼，有的話就顯示出來 (Valida scanner)
                 final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
                 if (qrCodes.size() != 0) {
                     textView.post(new Runnable() {
@@ -94,10 +93,17 @@ public class QRcodeFragment extends Fragment {
         return view;
     }
 
-
-    public void permissao_camera() {
+    public void opencamera() {
+        //Validar permissão
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+        } else {
+            try {
+                //exibir câmera no surfaceView
+                cameraSource.start(surfaceView.getHolder());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
