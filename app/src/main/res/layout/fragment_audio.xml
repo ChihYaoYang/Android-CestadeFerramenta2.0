@@ -8,63 +8,75 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#F5F3EF"
+        android:backgroundTint="#FAF4F4">
 
         <ImageView
             android:id="@+id/imageView7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:src="@drawable/audio"
+            android:layout_width="363dp"
+            android:layout_height="271dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/phone1"
             app:layout_constraintBottom_toTopOf="@+id/imageView6"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.08" />
 
         <ImageView
             android:id="@+id/imageView6"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="76dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="412dp"
+            android:layout_marginBottom="8dp"
             android:src="@drawable/mic"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/gravar"
-            app:layout_constraintHorizontal_bias="0.771"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/gravar"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="76dp"
-            android:backgroundTint="#FF9800"
+            style="@style/custom1"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#F44336"
             android:text="Gravar"
-            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.826"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.607" />
 
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="180dp"
             android:src="@drawable/audios"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/escutar"
             app:layout_constraintHorizontal_bias="0.771"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView6"
-            app:layout_constraintVertical_bias="0.158" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.993" />
 
         <Button
             android:id="@+id/escutar"
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
-            android:backgroundTint="#2196F3"
+            android:layout_marginBottom="184dp"
+            android:backgroundTint="#3F51B5"
             android:text="Escutar"
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -72,6 +84,22 @@
             app:layout_constraintHorizontal_bias="0.826"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gravar"
-            app:layout_constraintVertical_bias="0.158" />
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/raio"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.523"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.352" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
