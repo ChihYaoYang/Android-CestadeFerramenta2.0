@@ -1,7 +1,9 @@
 package com.example.senac.ferramentas20;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
@@ -41,6 +43,7 @@ public class QRcodeFragment extends Fragment {
         textView = view.findViewById(R.id.qrtextview);
         scanner = view.findViewById(R.id.scanner);
 
+        permissioncheck();
         scanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,10 +96,23 @@ public class QRcodeFragment extends Fragment {
         return view;
     }
 
+    public void permissioncheck() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+        }
+    }
+
     public void opencamera() {
         //Validar permissão
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+            //Validar permissão Qunado usuário clicar não mostrar mais permissão
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.CAMERA)) {
+            } else {
+                //Abrir configuração do APP
+                Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                startActivity(i);
+            }
         } else {
             try {
                 //exibir câmera no surfaceView

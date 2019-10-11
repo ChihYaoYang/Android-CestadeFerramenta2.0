@@ -2,7 +2,9 @@ package com.example.senac.ferramentas20;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
@@ -47,6 +49,13 @@ public class Phone_ImeiFragment extends Fragment {
     public void getDeviceIMEI() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            //Validar permissão Qunado usuário clicar não mostrar mais permissão
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_PHONE_STATE)) {
+            } else {
+                //Abrir configuração do APP
+                Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                startActivity(i);
+            }
         } else {
             //Device imei
             tm = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);

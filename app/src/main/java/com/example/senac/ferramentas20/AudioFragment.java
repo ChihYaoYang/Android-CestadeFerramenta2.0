@@ -1,9 +1,11 @@
 package com.example.senac.ferramentas20;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
@@ -43,6 +45,13 @@ public class AudioFragment extends Fragment {
             public void onClick(View view) {
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+                    //Validar permissão Qunado usuário clicar não mostrar mais permissão
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.RECORD_AUDIO)) {
+                    } else {
+                        //Abrir configuração do APP
+                        Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                        startActivity(i);
+                    }
                 } else {
                     gravar();
                 }
@@ -51,11 +60,7 @@ public class AudioFragment extends Fragment {
         escutar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, 1);
-                } else {
-                    escutar();
-                }
+                escutar();
             }
         });
         return view;
