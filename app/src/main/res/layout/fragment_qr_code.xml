@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context=".HomeFragment"
+    android:background="@drawable/fundo_camera">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
             android:layout_width="315dp"
             android:layout_height="45dp"
             android:text=" "
+            android:textColor="#ffffff"
             android:textIsSelectable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +43,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="92dp"
-            android:backgroundTint="#3F51B5"
+            android:backgroundTint="#110E0E"
             android:text="Open câmera"
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
